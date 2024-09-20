@@ -7,6 +7,7 @@
  * optimizations here wouldn't be feasible. 🙏🏼
  */
 import * as React from 'react'
+import * as XRegExp from 'xregexp'
 
 /**
  * Analogous to `node.type`. Please note that the values here may change at any time,
@@ -255,8 +256,39 @@ const HEADING_SETEXT_R = /^([^\n]+)\n *(=|-){3,} *(?:\n *)+\n/
  * 6. Capture excess newlines afterward
  *    \n*
  */
-const HTML_BLOCK_ELEMENT_R =
-  /^ *(?!<[a-z][^ >/]* ?\/>)<([a-z][^ >/]*) ?((?:[^>]*[^/])?)>\n?(\s*(?:<\1[^>]*?>[\s\S]*?<\/\1>|(?!<\1\b)[\s\S])*?)<\/\1>(?!<\/\1>)\n*/i
+
+const HTML_BLOCK_ELEMENT_R = XRegExp.build(
+  `
+  ^\\s* <                             # Start of line, followed by optional spaces and the opening tag "<"
+  (?<tag> [a-z][^ >/]* )              # Capture the tag name (capture tag)
+  \\s* (?:                            # Optionally capture attributes
+      (?<attributes> [^>]*? )?        # Non-greedy match for attributes (capture attributes)
+  ) \\s* > \\n?                       # End of the opening tag, followed by optional newline
+  (?<content>                         # Capture the content within the tag (capture content)
+    (?:
+      (?:
+        [^<]*                        # Any non-tag text
+        |
+        <!-- [\\s\\S]*? -->           # HTML comments
+        |
+        <\\k<tag>[^>]*> [\\s\\S]*? <\\/\\k<tag>> # Nested same tags
+        |
+        <[^/][^>]*>                   # Other nested tags
+        |
+        </[^>]+>                      # Other closing tags
+      )*
+    )
+  ) <\\/ \\k<tag> >                   # Match the closing tag ensuring it corresponds to the opening tag
+  \\s* \\n*                           # Optionally match trailing whitespace and newlines
+`,
+  {
+    tag: XRegExp(' [a-z][^ >/]* ', 'x'),
+    attributes: XRegExp(' [^>]* ', 'x'),
+  },
+  'ix'
+)
+// const HTML_BLOCK_ELEMENT_R =
+//   /^ *(?!<[a-z][^ >/]* ?\/>)<([a-z][^ >/]*) ?((?:[^>]*[^/])?)>\n?(\s*(?:<\1[^>]*?>[\s\S]*?<\/\1>|(?!<\1\b)[\s\S])*?)<\/\1>(?!<\/\1>)\n*/i
 
 const HTML_CHAR_CODE_R = /&([a-z0-9]+|#[0-9]{1,6}|#x[0-9a-fA-F]{1,6});/gi
 
@@ -850,6 +882,7 @@ function parserFor(
         const capture = rule.match(source, state, prevCapture)
 
         if (capture) {
+          console.log(capture, ruleType)
           const currCaptureString = capture[0]
           source = source.substring(currCaptureString.length)
           const parsed = rule.parse(capture, nestedParse, state)
@@ -1508,7 +1541,7 @@ export function compiler(
         ).trim() as MarkdownToJSX.HTMLTags
 
         const ast = {
-          attrs: attrStringToMap(tag, capture[2]),
+          attrs: attrStringToMap(tag, capture[2] || ''),
           noInnerParse: noInnerParse,
           tag,
         } as {
@@ -1520,6 +1553,8 @@ export function compiler(
         }
 
         state.inAnchor = state.inAnchor || tagName === 'a'
+
+        console.log(capture, state, ast, trimmed)
 
         if (noInnerParse) {
           ast.text = capture[3]

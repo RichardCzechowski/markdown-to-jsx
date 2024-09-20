@@ -1579,6 +1579,59 @@ describe('lists', () => {
     `)
   })
 
+  it.only('should handle a deeply nested html lists', () => {
+    render(
+      compiler(
+        '<div><ul><li>a<ul><li>a.1<ul><li>a.1.1</li></ul></li></ul></li><li>b1</li></ul></div>'
+      )
+    )
+
+    expect(root.innerHTML).toMatchInlineSnapshot(`
+      <div>
+        <ul>
+          <li>
+            a
+            <ul>
+              <li>
+                a.1
+                <ul>
+                  <li>
+                    a.1.1
+                  </li>
+                </ul>
+              </li>
+            </ul>
+            &lt;/li&gt;
+          </li>
+          <li>
+          </li>
+          b1
+        </ul>
+      </div>
+    `)
+    // expect(root.innerHTML).toMatchInlineSnapshot(`
+    //   <div>
+    //     <ul>
+    //       <li>
+    //         a
+    //         <ul>
+    //           <li>
+    //             a
+    //             <ul>
+    //               <li>
+    //               a
+    //               </li>
+    //             </ul>
+    //           </li>
+    //         </ul>
+    //       </li>
+    //       <li>
+    //         b
+    //       </li>
+    //     </ul>
+    //   </div>`)
+  })
+
   it('should handle a mixed nested list', () => {
     render(compiler(['- xyz', '  1. abc', '    - def', '- foo'].join('\n')))
 
