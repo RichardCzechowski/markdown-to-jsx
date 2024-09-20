@@ -1474,6 +1474,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime-corejs3@npm:^7.16.5":
+  version: 7.25.6
+  resolution: "@babel/runtime-corejs3@npm:7.25.6"
+  dependencies:
+    core-js-pure: "npm:^3.30.2"
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 67e0a012c015cdb24b373a135d93c4d73c043b266d100bdcad8aa061794121d79b4a9ce3722f881ef44bc209c3665aa8b40f7e16e4bad6d344793d2517dd9ead
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.20.1, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.4":
   version: 7.24.1
   resolution: "@babel/runtime@npm:7.24.1"
@@ -3798,6 +3808,13 @@ __metadata:
   dependencies:
     browserslist: "npm:^4.21.9"
   checksum: a4601192319b67a575abfb175a9822ae266bfa88cd0dc6be5bce3d6ce6d4674bd675a052c48a48520d956b193ccd5c8458c1b0901bf0f71d59edaad2a56ef667
+  languageName: node
+  linkType: hard
+
+"core-js-pure@npm:^3.30.2":
+  version: 3.38.1
+  resolution: "core-js-pure@npm:3.38.1"
+  checksum: 7dfd59bf3a09277056ac2ef87e49b49d77340952e99ee12b3e1e53bf7e1f34a8ee1fb6026f286b1ba29957f5728664430ccd1ff86983c7ae5fa411d4da74d3de
   languageName: node
   linkType: hard
 
@@ -7111,6 +7128,7 @@ __metadata:
     theredoc: "npm:^1.0.0"
     ts-jest: "npm:^29.1.1"
     typescript: "npm:^5.3.3"
+    xregexp: "npm:^5.1.1"
   peerDependencies:
     react: ">= 0.14.0"
   languageName: unknown
@@ -10540,6 +10558,15 @@ __metadata:
   version: 2.2.0
   resolution: "xmlchars@npm:2.2.0"
   checksum: 4ad5924974efd004a47cce6acf5c0269aee0e62f9a805a426db3337af7bcbd331099df174b024ace4fb18971b8a56de386d2e73a1c4b020e3abd63a4a9b917f1
+  languageName: node
+  linkType: hard
+
+"xregexp@npm:^5.1.1":
+  version: 5.1.1
+  resolution: "xregexp@npm:5.1.1"
+  dependencies:
+    "@babel/runtime-corejs3": "npm:^7.16.5"
+  checksum: 1f868050d9e03a9d0e8aabc7db9858918d7178e0a8e0f3df6356cb710aa231661ac7ff4c90ac53a07dbce80b8f3c22878bb44ca5f5449ec5dda3b2ee6cea8fa2
   languageName: node
   linkType: hard
 
